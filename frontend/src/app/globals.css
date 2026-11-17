@@ -460,9 +460,65 @@ img {
   align-items: stretch;
   border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
   background-color: var(--color-text);
   min-height: 300px;
+  /* Degradados por defecto */
+  --overlay-start: rgba(0, 0, 0, 0.85);
+  --overlay-mid: rgba(0, 0, 0, 0.45);
+  --overlay-end: rgba(0, 0, 0, 0);
+  --overlay-hover-start: rgba(0, 0, 0, 0.92);
+  --overlay-hover-mid: rgba(0, 0, 0, 0.6);
+}
+
+/* 1. Audio / Video: Morado a transparente */
+.service-box:nth-child(1),
+.service-box--audio-video {
+  --overlay-start: rgba(45, 10, 105, 0.88);
+  --overlay-mid: rgba(90, 25, 180, 0.55);
+  --overlay-end: rgba(61, 18, 153, 0);
+  --overlay-hover-start: rgba(60, 15, 135, 0.94);
+  --overlay-hover-mid: rgba(115, 30, 215, 0.72);
+}
+
+/* 2. Control: Naranja a transparente */
+.service-box:nth-child(2),
+.service-box--control {
+  --overlay-start: rgba(165, 45, 10, 0.88);
+  --overlay-mid: rgba(240, 85, 25, 0.55);
+  --overlay-end: rgba(253, 96, 39, 0);
+  --overlay-hover-start: rgba(195, 55, 12, 0.94);
+  --overlay-hover-mid: rgba(255, 100, 30, 0.72);
+}
+
+/* 3. Iluminación: Rojo / Naranja-Rojo a transparente */
+.service-box:nth-child(3),
+.service-box--iluminacion {
+  --overlay-start: rgba(145, 18, 25, 0.88);
+  --overlay-mid: rgba(215, 50, 35, 0.55);
+  --overlay-end: rgba(223, 71, 38, 0);
+  --overlay-hover-start: rgba(180, 22, 30, 0.94);
+  --overlay-hover-mid: rgba(235, 55, 40, 0.72);
+}
+
+/* 4. Redes: Celeste / Azul a transparente */
+.service-box:nth-child(4),
+.service-box--redes {
+  --overlay-start: rgba(0, 60, 120, 0.88);
+  --overlay-mid: rgba(0, 125, 200, 0.55);
+  --overlay-end: rgba(34, 165, 203, 0);
+  --overlay-hover-start: rgba(0, 80, 155, 0.94);
+  --overlay-hover-mid: rgba(15, 145, 225, 0.72);
+}
+
+/* 5. Seguridad: Azul corporativo profundo a transparente */
+.service-box:nth-child(5),
+.service-box--seguridad {
+  --overlay-start: rgba(15, 40, 95, 0.88);
+  --overlay-mid: rgba(30, 85, 165, 0.55);
+  --overlay-end: rgba(0, 108, 184, 0);
+  --overlay-hover-start: rgba(20, 50, 120, 0.94);
+  --overlay-hover-mid: rgba(35, 105, 195, 0.72);
 }
 
 .service-box--full {
@@ -494,28 +550,31 @@ img {
   background-repeat: no-repeat;
   background-size: cover;
   opacity: 1;
-  transition: all ease-in-out 0.25s;
+  transition: all ease-in-out 0.35s;
   z-index: 0;
 }
 
 .service-box:hover .service-image {
-  opacity: 0.7;
-  transform: scale(1.1);
+  opacity: 1;
+  transform: scale(1.06);
 }
 
 .service-box .service-content-bg {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.25) 55%, rgba(0, 0, 0, 0) 100%);
-  transition: all ease-in-out 0.25s;
+  background: linear-gradient(90deg, var(--overlay-start) 0%, var(--overlay-mid) 50%, var(--overlay-end) 100%);
+  opacity: 1;
+  transition: opacity 0.35s ease-in-out, transform 0.35s ease-in-out;
+  pointer-events: none;
 }
 
 .service-box:nth-child(even) .service-content-bg {
-  transform: rotate(180deg);
+  background: linear-gradient(270deg, var(--overlay-start) 0%, var(--overlay-mid) 50%, var(--overlay-end) 100%);
+  transform: none;
 }
 
-.service-box--home:hover .service-content-bg {
+.service-box:hover .service-content-bg {
   opacity: 0;
 }
 

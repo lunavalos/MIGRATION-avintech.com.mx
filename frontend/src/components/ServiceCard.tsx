@@ -48,7 +48,7 @@ export function ServiceCard({
   return (
     <Link
       href={`/servicios/${servicio.slug}`}
-      className={`service-box ${variant === 'full' ? 'service-box--full' : 'service-box--home'}`}
+      className={`service-box service-box--${servicio.slug} ${variant === 'full' ? 'service-box--full' : 'service-box--home'}`}
     >
       <div className="service-image" style={{ backgroundImage: `url("${imageUrl}")` }} />
       <div className="service-content-bg" />

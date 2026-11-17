@@ -28,7 +28,7 @@ export function ContactForm() {
     setError(null)
 
     try {
-      const res = await fetch(`${PAYLOAD_PUBLIC}/api/contact-submissions`, {
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -41,26 +41,17 @@ export function ContactForm() {
       })
 
       if (!res.ok) {
-        throw new Error('No se pudo enviar el mensaje. Intenta nuevamente.')
+        const errorData = await res.json().catch(() => ({}))
+        throw new Error(errorData.error || 'No se pudo enviar el mensaje. Intenta nuevamente.')
       }
 
       router.push('/gracias')
-    } catch {
-      // Try internal Next.js fallback route if Payload is unreachable
-      try {
-        const fallbackRes = await fetch('/api/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fullName, email, phone, message, interests }),
-        })
-        if (fallbackRes.ok) {
-          router.push('/gracias')
-          return
-        }
-      } catch {
-        // ignore
-      }
-      setError('Ocurrió un error al enviar tu mensaje. Por favor contáctanos por teléfono o email.')
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Ocurrió un error al enviar tu mensaje. Por favor contáctanos por teléfono o email.',
+      )
     } finally {
       setSubmitting(false)
     }
