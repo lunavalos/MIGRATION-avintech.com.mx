@@ -67,6 +67,7 @@ export default buildConfig({
   },
   cors: [
     process.env.FRONTEND_URL || 'http://localhost:3000',
+    'https://new.avintech.com.mx',
     'https://avintech.com.mx',
     'https://www.avintech.com.mx',
     'http://localhost:3000',
@@ -77,6 +78,7 @@ export default buildConfig({
   ],
   csrf: [
     process.env.FRONTEND_URL || 'http://localhost:3000',
+    'https://new.avintech.com.mx',
     'https://avintech.com.mx',
     'https://www.avintech.com.mx',
     'http://localhost:3000',
