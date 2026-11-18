@@ -22,13 +22,21 @@ export async function POST(req: Request) {
       )
     }
 
-    const host = process.env.SMTP_HOST || 'mail.avintech.com.mx'
+    const host = process.env.SMTP_HOST
     const port = Number(process.env.SMTP_PORT) || 465
     const secure = process.env.SMTP_SECURE === 'false' ? false : true
-    const user = process.env.SMTP_USER || 'webform@avintech.com.mx'
-    const pass = process.env.SMTP_PASS || '1ab6fpNSGardEsjh'
-    const from = process.env.SMTP_FROM || `"Formulario Web Avintech" <${user}>`
+    const user = process.env.SMTP_USER
+    const pass = process.env.SMTP_PASS
+    const from = process.env.SMTP_FROM || (user ? `"Formulario Web Avintech" <${user}>` : undefined)
     const to = process.env.CONTACT_TO || 'contacto@avintech.com.mx'
+
+    if (!host || !user || !pass) {
+      console.error('Configuración SMTP incompleta en variables de entorno (SMTP_HOST, SMTP_USER, SMTP_PASS)')
+      return NextResponse.json(
+        { error: 'Servicio de correo temporalmente no disponible.' },
+        { status: 500 },
+      )
+    }
 
     const transporter = nodemailer.createTransport({
       host,
