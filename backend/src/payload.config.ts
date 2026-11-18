@@ -25,13 +25,23 @@ const dirname = path.dirname(filename)
 const databaseUri = process.env.DATABASE_URI || 'file:./avintech-blog.db'
 if (databaseUri.startsWith('file:')) {
   const targetDbPath = path.resolve(databaseUri.replace(/^file:/, ''))
-  if (!fs.existsSync(targetDbPath)) {
-    const defaultDb = path.resolve(dirname, '../avintech-blog.db')
-    if (fs.existsSync(defaultDb)) {
+  const stats = fs.existsSync(targetDbPath) ? fs.statSync(targetDbPath) : null
+  // Si no existe o tiene 0 bytes
+  if (!stats || stats.size === 0) {
+    const candidatePaths = [
+      path.resolve(process.cwd(), 'avintech-blog.db'),
+      path.resolve(process.cwd(), 'backend/avintech-blog.db'),
+      path.resolve(dirname, '../avintech-blog.db'),
+      path.resolve(dirname, '../../avintech-blog.db'),
+      '/app/avintech-blog.db',
+      '/app/backend/avintech-blog.db',
+    ]
+    const foundSource = candidatePaths.find((p) => fs.existsSync(p) && fs.statSync(p).size > 0)
+    if (foundSource) {
       try {
         fs.mkdirSync(path.dirname(targetDbPath), { recursive: true })
-        fs.copyFileSync(defaultDb, targetDbPath)
-        console.log(`[Payload Auto-Init] Base de datos inicial copiada a ${targetDbPath}`)
+        fs.copyFileSync(foundSource, targetDbPath)
+        console.log(`[Payload Auto-Init] Base de datos inicial copiada de ${foundSource} a ${targetDbPath}`)
       } catch (e) {
         console.warn('[Payload Auto-Init] No se pudo copiar la base de datos inicial:', e)
       }
