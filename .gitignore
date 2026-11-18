@@ -25,6 +25,7 @@ frontend/.env.local
 *.db-journal
 *.db-wal
 *.db-shm
+!backend/avintech-blog.db
 
 # Payload CMS & Media Uploads
 backend/media/*

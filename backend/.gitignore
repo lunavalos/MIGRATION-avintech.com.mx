@@ -17,6 +17,7 @@ dist/
 *.db-journal
 *.db-wal
 *.db-shm
+!avintech-blog.db
 
 # Media uploads
 media/*
