@@ -16,6 +16,14 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'admin.avintech.com.mx',
+      },
+      {
+        protocol: 'https',
+        hostname: 'avintech.com.mx',
+      },
+      {
+        protocol: 'https',
         hostname: 'img.youtube.com',
       },
     ],
