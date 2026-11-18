@@ -16,10 +16,6 @@ npm run seed   # Opcional: ya incluye la base SQLite avintech.db precargada
 npm run dev    # Inicia en http://localhost:3001 (Panel Admin: http://localhost:3001/admin)
 ```
 
-Credenciales de administrador iniciales (generadas en el seed):
-- **Email**: `admin@avintech.com.mx`
-- **Contraseña**: `Avintech2026!`
-
 ### 2. Frontend (Next.js — Puerto `3000`)
 
 ```bash
