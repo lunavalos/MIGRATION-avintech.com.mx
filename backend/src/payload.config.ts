@@ -1,6 +1,7 @@
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
+import fs from 'fs'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
@@ -20,6 +21,40 @@ import {
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// Auto-inicializar la BD y media en el volumen persistente si no existen
+const databaseUri = process.env.DATABASE_URI || 'file:./avintech-blog.db'
+if (databaseUri.startsWith('file:')) {
+  const targetDbPath = path.resolve(databaseUri.replace(/^file:/, ''))
+  if (!fs.existsSync(targetDbPath)) {
+    const defaultDb = path.resolve(dirname, '../avintech-blog.db')
+    if (fs.existsSync(defaultDb)) {
+      try {
+        fs.mkdirSync(path.dirname(targetDbPath), { recursive: true })
+        fs.copyFileSync(defaultDb, targetDbPath)
+        console.log(`[Payload Auto-Init] Base de datos inicial copiada a ${targetDbPath}`)
+      } catch (e) {
+        console.warn('[Payload Auto-Init] No se pudo copiar la base de datos inicial:', e)
+      }
+    }
+  }
+}
+
+const mediaTarget = process.env.MEDIA_DIR
+  ? path.resolve(process.env.MEDIA_DIR)
+  : path.resolve(dirname, '../../media')
+if (!fs.existsSync(mediaTarget)) {
+  try {
+    fs.mkdirSync(mediaTarget, { recursive: true })
+    const defaultMedia = path.resolve(dirname, '../../media')
+    if (fs.existsSync(defaultMedia) && defaultMedia !== mediaTarget) {
+      fs.cpSync(defaultMedia, mediaTarget, { recursive: true, errorOnExist: false })
+      console.log(`[Payload Auto-Init] Medios iniciales copiados a ${mediaTarget}`)
+    }
+  } catch (e) {
+    console.warn('[Payload Auto-Init] No se pudo copiar la carpeta de medios inicial:', e)
+  }
+}
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -32,14 +67,22 @@ export default buildConfig({
   },
   cors: [
     process.env.FRONTEND_URL || 'http://localhost:3000',
+    'https://avintech.com.mx',
+    'https://www.avintech.com.mx',
+    'http://localhost:3000',
     'http://127.0.0.1:3000',
     process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3001',
+    'https://admin.avintech.com.mx',
     'http://127.0.0.1:3001',
   ],
   csrf: [
     process.env.FRONTEND_URL || 'http://localhost:3000',
+    'https://avintech.com.mx',
+    'https://www.avintech.com.mx',
+    'http://localhost:3000',
     'http://127.0.0.1:3000',
     process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3001',
+    'https://admin.avintech.com.mx',
     'http://127.0.0.1:3001',
   ],
   collections: [

@@ -14,7 +14,9 @@ export const Media: CollectionConfig = {
     delete: ({ req: { user } }) => Boolean(user),
   },
   upload: {
-    staticDir: path.resolve(dirname, '../../media'),
+    staticDir: process.env.MEDIA_DIR
+      ? path.resolve(process.env.MEDIA_DIR)
+      : path.resolve(dirname, '../../media'),
     mimeTypes: ['image/*', 'video/*'],
   },
   fields: [
